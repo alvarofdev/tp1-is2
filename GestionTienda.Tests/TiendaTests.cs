@@ -24,12 +24,12 @@ public class TiendaTests
         Producto producto1 = new Producto("Pan", 1000, "panaderia");
         Producto producto2 = new Producto("Carne", 20000, "carniceria");
 
-
         tienda.agregarProducto(producto1);
         tienda.agregarProducto(producto2);
 
+        var buscar = tienda.buscarProducto(producto2.obtenerNombre());
 
-        Assert.Same(producto2, tienda.buscarProducto(producto2.obtenerNombre()));
+        Assert.Same(producto2, buscar);
     }
 
     [Fact]
@@ -40,12 +40,29 @@ public class TiendaTests
         Producto producto1 = new Producto("Pan", 1000, "panaderia");
         Producto producto2 = new Producto("Carne", 20000, "carniceria");
 
+        tienda.agregarProducto(producto1);
+        tienda.agregarProducto(producto2);
+
+        var buscar = tienda.buscarProducto("Pizza");
+
+        Assert.Null(buscar);
+    }
+
+    [Fact]
+    public void eliminarProducto()
+    {
+        Tienda tienda = new Tienda();
+
+        Producto producto1 = new Producto("Pan", 1000, "panaderia");
+        Producto producto2 = new Producto("Carne", 20000, "carniceria");
 
         tienda.agregarProducto(producto1);
         tienda.agregarProducto(producto2);
 
 
-        Assert.Null(tienda.buscarProducto("Pizza"));
-    }
+        var eliminado = tienda.eliminarProducto("Pan");
 
+        Assert.True(eliminado);
+        Assert.False(tienda.eliminarProducto("Pan"));
+    }
 }
