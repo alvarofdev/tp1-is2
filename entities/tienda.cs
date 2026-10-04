@@ -57,4 +57,9 @@ public class Tienda
 
         return productoConDescuento;
     }
+
+    public decimal calcular_total_carrito(List<string> carrito)
+    {
+        return carrito.Sum(nombre => this.buscarProducto(nombre).Precio);
+    }
 }

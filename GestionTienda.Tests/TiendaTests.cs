@@ -79,4 +79,17 @@ public class TiendaTests : IClassFixture<TiendaFixture>
         Assert.Equal(800m, precioActualizado);
         productoMock.Verify(producto => producto.actualizarPrecio(800m), Times.Once);
     }
+
+    [Fact]
+    public void calcularTotalCarritoIntegraProductosYDescuentos()
+    {
+        Tienda tienda = this.fixture.crearTiendaConProductosReales();
+
+        tienda.aplicarDescuento("Pan", 0.20m);
+        tienda.aplicarDescuento("Carne", 0.10m);
+
+        var total = tienda.calcular_total_carrito(new List<string> { "Pan", "Carne", "Leche" });
+
+        Assert.Equal(20300m, total);
+    }
 }
