@@ -1,10 +1,10 @@
 namespace GestionTienda.Entities;
 
-class Tienda
+public class Tienda
 {
     private List<Producto> inventario;
 
-    public Tienda(List<Producto> inventario)
+    public Tienda()
     {
         this.inventario = new List<Producto>();
     }

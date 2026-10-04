@@ -1,6 +1,6 @@
 namespace GestionTienda.Entities;
 
-class Producto
+public class Producto
 {
     private string nombre;
     private float precio;

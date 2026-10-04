@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GestionTienda.csproj" />
+  <Project Path="GestionTienda.Tests/GestionTienda.Tests.csproj" />
+</Solution>
