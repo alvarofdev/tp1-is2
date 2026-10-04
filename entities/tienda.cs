@@ -16,7 +16,7 @@ public class Tienda
         return this.Inventario;
     }
 
-    public Producto? buscarProducto(string nombre)
+    public Producto buscarProducto(string nombre)
     {
         var result = this.Inventario.FirstOrDefault(producto =>
                 producto.Nombre == nombre);
@@ -41,5 +41,20 @@ public class Tienda
 
         this.Inventario.Remove(productoAEliminar);
         return true;
+    }
+
+    public Producto aplicarDescuento(string nombre, decimal descuento)
+    {
+        if (descuento < 0 || descuento > 1)
+        {
+            throw new ArgumentOutOfRangeException("descuento", $"El descuento no puede ser negativo o mayor a 1");
+        }
+
+        var productoConDescuento = this.buscarProducto(nombre);
+
+        decimal nuevoPrecio = productoConDescuento.Precio * (1 - descuento);
+        productoConDescuento.actualizarPrecio(nuevoPrecio);
+
+        return productoConDescuento;
     }
 }

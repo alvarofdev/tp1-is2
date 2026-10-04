@@ -2,8 +2,8 @@ namespace GestionTienda.Entities;
 
 public class Producto
 {
-    public string Nombre { get; private set; }
-    public decimal Precio { get; private set; }
+    public virtual string Nombre { get; private set; }
+    public virtual decimal Precio { get; private set; }
     public string Categoria { get; private set; }
 
     public Producto(string nombre, decimal precio, string categoria)
@@ -13,7 +13,7 @@ public class Producto
         this.Categoria = categoria;
     }
 
-    public void actualizarPrecio(decimal precio)
+    public virtual void actualizarPrecio(decimal precio)
     {
         this.Precio = this.validarPrecio(precio);
     }
