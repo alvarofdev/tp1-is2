@@ -2,36 +2,44 @@ namespace GestionTienda.Entities;
 
 public class Tienda
 {
-    private List<Producto> inventario;
+    private List<Producto> Inventario;
 
     public Tienda()
     {
-        this.inventario = new List<Producto>();
+        this.Inventario = new List<Producto>();
     }
 
     public List<Producto> agregarProducto(Producto nuevoProducto)
     {
-        this.inventario.Add(nuevoProducto);
+        this.Inventario.Add(nuevoProducto);
 
-        return this.inventario;
+        return this.Inventario;
     }
 
     public Producto? buscarProducto(string nombre)
     {
-        return this.inventario.FirstOrDefault(p => p.obtenerNombre() == nombre);
+        var result = this.Inventario.FirstOrDefault(producto =>
+                producto.Nombre == nombre);
+
+        if (result == null)
+        {
+            throw new ArgumentNullException($"no se encuentra producto con nombre {nombre}");
+        }
+
+        return result;
     }
 
     public bool eliminarProducto(string nombre)
     {
-        foreach (Producto producto in this.inventario)
+        Producto? productoAEliminar = this.Inventario.Find(producto =>
+                producto.Nombre == nombre);
+
+        if (productoAEliminar == null)
         {
-            if (producto.obtenerNombre() == nombre)
-            {
-                this.inventario.Remove(producto);
-                return true;
-            }
+            throw new KeyNotFoundException($"No se encuentra el producto {nombre}");
         }
 
-        return false;
+        this.Inventario.Remove(productoAEliminar);
+        return true;
     }
 }

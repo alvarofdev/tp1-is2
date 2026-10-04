@@ -27,13 +27,13 @@ public class TiendaTests
         tienda.agregarProducto(producto1);
         tienda.agregarProducto(producto2);
 
-        var buscar = tienda.buscarProducto(producto2.obtenerNombre());
+        var buscar = tienda.buscarProducto(producto2.Nombre);
 
         Assert.Same(producto2, buscar);
     }
 
     [Fact]
-    public void buscarProductoIncorrecto()
+    public void buscarProductoInexistente()
     {
         Tienda tienda = new Tienda();
 
@@ -43,9 +43,7 @@ public class TiendaTests
         tienda.agregarProducto(producto1);
         tienda.agregarProducto(producto2);
 
-        var buscar = tienda.buscarProducto("Pizza");
-
-        Assert.Null(buscar);
+        Assert.Throws<ArgumentNullException>(() => tienda.buscarProducto("Pizza"));
     }
 
     [Fact]
@@ -63,6 +61,14 @@ public class TiendaTests
         var eliminado = tienda.eliminarProducto("Pan");
 
         Assert.True(eliminado);
-        Assert.False(tienda.eliminarProducto("Pan"));
+        Assert.Throws<ArgumentNullException>(() => tienda.buscarProducto("Pan"));
+    }
+
+    [Fact]
+    public void eliminarProductoInexistente()
+    {
+        Tienda tienda = new Tienda();
+
+        Assert.Throws<KeyNotFoundException>(() => tienda.eliminarProducto("Pizza"));
     }
 }

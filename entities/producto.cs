@@ -2,19 +2,33 @@ namespace GestionTienda.Entities;
 
 public class Producto
 {
-    private string nombre;
-    private float precio;
-    private string categoria;
+    public string Nombre { get; private set; }
+    public decimal Precio { get; private set; }
+    public string Categoria { get; private set; }
 
-    public Producto(string nombre, float precio, string categoria)
+    public Producto(string nombre, decimal precio, string categoria)
     {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.categoria = categoria;
+        this.Nombre = nombre;
+        this.Precio = this.validarPrecio(precio);
+        this.Categoria = categoria;
     }
 
-    public string obtenerNombre()
+    public void actualizarPrecio(decimal precio)
     {
-        return this.nombre;
+        this.Precio = this.validarPrecio(precio);
+    }
+
+    private decimal validarPrecio(decimal precio)
+    {
+        if (precio < 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                    nameof(precio),
+                    precio,
+                    "El precio no puede ser un valor negativo"
+            );
+        }
+
+        return precio;
     }
 }
