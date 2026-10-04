@@ -3,22 +3,20 @@ using Moq;
 
 namespace GestionTienda.Tests;
 
-public class TiendaTests
+public class TiendaTests : IClassFixture<TiendaFixture>
 {
-    private static Mock<Producto> CrearProductoMock(string nombre, decimal precio)
-    {
-        var productoMock = new Mock<Producto>(nombre, precio, "categoria");
-        productoMock.SetupGet(producto => producto.Nombre).Returns(nombre);
-        productoMock.SetupGet(producto => producto.Precio).Returns(precio);
+    private readonly TiendaFixture fixture;
 
-        return productoMock;
+    public TiendaTests(TiendaFixture fixture)
+    {
+        this.fixture = fixture;
     }
 
     [Fact]
     public void agregarProducto()
     {
         Tienda tienda = new Tienda();
-        var productoMock = CrearProductoMock("Pan", 1000m);
+        var productoMock = this.fixture.crearProductoMock("Pan", 1000m);
 
         var inventario = tienda.agregarProducto(productoMock.Object);
 
@@ -29,29 +27,17 @@ public class TiendaTests
     [Fact]
     public void buscarProductoCorrecto()
     {
-        Tienda tienda = new Tienda();
+        Tienda tienda = this.fixture.crearTiendaConProductos();
 
-        var producto1Mock = CrearProductoMock("Pan", 1000m);
-        var producto2Mock = CrearProductoMock("Carne", 20000m);
+        var buscar = tienda.buscarProducto("Carne");
 
-        tienda.agregarProducto(producto1Mock.Object);
-        tienda.agregarProducto(producto2Mock.Object);
-
-        var buscar = tienda.buscarProducto(producto2Mock.Object.Nombre);
-
-        Assert.Same(producto2Mock.Object, buscar);
+        Assert.Equal("Carne", buscar.Nombre);
     }
 
     [Fact]
     public void buscarProductoInexistente()
     {
-        Tienda tienda = new Tienda();
-
-        var producto1Mock = CrearProductoMock("Pan", 1000m);
-        var producto2Mock = CrearProductoMock("Carne", 20000m);
-
-        tienda.agregarProducto(producto1Mock.Object);
-        tienda.agregarProducto(producto2Mock.Object);
+        Tienda tienda = this.fixture.crearTiendaConProductos();
 
         Assert.Throws<ArgumentNullException>(() => tienda.buscarProducto("Pizza"));
     }
@@ -59,14 +45,7 @@ public class TiendaTests
     [Fact]
     public void eliminarProducto()
     {
-        Tienda tienda = new Tienda();
-
-        var producto1Mock = CrearProductoMock("Pan", 1000m);
-        var producto2Mock = CrearProductoMock("Carne", 20000m);
-
-        tienda.agregarProducto(producto1Mock.Object);
-        tienda.agregarProducto(producto2Mock.Object);
-
+        Tienda tienda = this.fixture.crearTiendaConProductos();
 
         var eliminado = tienda.eliminarProducto("Pan");
 
@@ -77,7 +56,7 @@ public class TiendaTests
     [Fact]
     public void eliminarProductoInexistente()
     {
-        Tienda tienda = new Tienda();
+        Tienda tienda = this.fixture.crearTiendaConProductos();
 
         Assert.Throws<KeyNotFoundException>(() => tienda.eliminarProducto("Pizza"));
     }
@@ -86,7 +65,7 @@ public class TiendaTests
     public void aplicarDescuentoCalculaNuevoPrecioYActualizaProducto()
     {
         Tienda tienda = new Tienda();
-        var productoMock = CrearProductoMock("Pan", 1000m);
+        var productoMock = this.fixture.crearProductoMock("Pan", 1000m);
         decimal precioActualizado = 0m;
         productoMock
             .Setup(producto => producto.actualizarPrecio(It.IsAny<decimal>()))
